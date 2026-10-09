@@ -13,7 +13,7 @@ export function MobileNavigation() {
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
-        <Button className="md:hidden" size="icon" variant="outline" aria-label="Open navigation menu">
+        <Button className="lg:hidden" size="icon" variant="outline" aria-label="Open navigation menu">
           <Menu aria-hidden="true" />
         </Button>
       </Dialog.Trigger>

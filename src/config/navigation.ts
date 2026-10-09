@@ -1,5 +1,6 @@
 export const publicNavigation = [
   { label: "Platform", href: "/platform" },
+  { label: "Suppliers", href: "/suppliers" },
   { label: "Company", href: "/about" },
   { label: "Contact", href: "/contact" },
   { label: "FAQ", href: "/faq" },
@@ -8,6 +9,7 @@ export const publicNavigation = [
 export const footerNavigation = {
   platform: [
     { label: "Overview", href: "/platform" },
+    { label: "Verified suppliers", href: "/suppliers" },
     { label: "Buyer workspace", href: "/platform#buyers" },
     { label: "Supplier workspace", href: "/platform#suppliers" },
     { label: "Admin controls", href: "/platform#administrators" },
