@@ -20,6 +20,7 @@ import {
 import Link from "next/link";
 
 import { Logo } from "@/components/brand/logo";
+import { SiteHeader } from "@/components/layout/site-header";
 import { Button } from "@/components/ui/button";
 
 const roleCards = [
@@ -84,39 +85,13 @@ const platformHighlights = [
 export default function Home() {
   return (
     <main className="overflow-hidden bg-background text-foreground">
+      <SiteHeader />
+
       <div className="relative isolate border-b border-ink/10 bg-cream">
         <div className="hero-grid pointer-events-none absolute inset-0 -z-20 opacity-70" />
         <div className="pointer-events-none absolute left-1/2 top-0 -z-10 h-[42rem] w-[42rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-teal/10 blur-3xl" />
 
-        <header className="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-10">
-          <Logo />
-
-          <nav className="hidden items-center gap-8 text-sm font-semibold text-ink/65 md:flex" aria-label="Main navigation">
-            <Link className="transition-colors hover:text-ink" href="#platform">
-              Platform
-            </Link>
-            <Link className="transition-colors hover:text-ink" href="#roles">
-              For teams
-            </Link>
-            <Link className="transition-colors hover:text-ink" href="#workflow">
-              How it works
-            </Link>
-          </nav>
-
-          <div className="flex items-center gap-2">
-            <Button asChild className="hidden sm:inline-flex" variant="ghost" size="sm">
-              <Link href="/login">Sign in</Link>
-            </Button>
-            <Button asChild size="sm">
-              <Link href="/register">
-                Get started
-                <ArrowRight aria-hidden="true" />
-              </Link>
-            </Button>
-          </div>
-        </header>
-
-        <section className="mx-auto grid max-w-7xl items-center gap-16 px-5 pb-20 pt-14 sm:px-8 sm:pb-28 sm:pt-20 lg:grid-cols-[1.02fr_0.98fr] lg:px-10 lg:pb-32 lg:pt-24">
+        <section className="mx-auto grid max-w-7xl items-center gap-16 px-5 pb-20 pt-16 sm:px-8 sm:pb-28 sm:pt-24 lg:grid-cols-[1.02fr_0.98fr] lg:px-10 lg:pb-32 lg:pt-28">
           <div>
             <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-teal/20 bg-white/70 px-3.5 py-2 text-xs font-bold uppercase tracking-[0.16em] text-teal shadow-sm shadow-teal/5 backdrop-blur">
               <span className="flex size-6 items-center justify-center rounded-full bg-teal text-white">

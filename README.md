@@ -13,7 +13,7 @@ ProcuraX is the frontend for a B2B procurement platform covering supplier onboar
 ## Local development
 
 1. Copy `.env.example` to `.env.local`.
-2. Make sure the ProcuraX backend is available at the configured `API_BASE_URL`.
+2. Confirm the configured `API_BASE_URL` points to the ProcuraX backend. The example uses the deployed Render API.
 3. Install dependencies with `npm install`.
 4. Start the app with `npm run dev`.
 
