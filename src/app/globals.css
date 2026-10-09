@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f8f5ec;
+  --foreground: #102f2d;
+  --cream: #f8f5ec;
+  --ink: #102f2d;
+  --teal: #087f75;
+  --mint: #a8eadc;
+  --amber: #f7bf4f;
+  --white: #ffffff;
+  --radius: 1rem;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-cream: var(--cream);
+  --color-ink: var(--ink);
+  --color-teal: var(--teal);
+  --color-mint: var(--mint);
+  --color-amber: var(--amber);
+  --color-white: var(--white);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+* {
+  border-color: color-mix(in srgb, var(--ink) 12%, transparent);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--amber);
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--amber) 80%, white);
+  outline-offset: 3px;
+}
+
+@layer components {
+  .eyebrow {
+    color: var(--teal);
+    font-size: 0.72rem;
+    font-weight: 750;
+    letter-spacing: 0.17em;
+    line-height: 1.4;
+    text-transform: uppercase;
+  }
+
+  .section-title {
+    color: var(--ink);
+    font-size: clamp(2.5rem, 5vw, 4.6rem);
+    font-weight: 620;
+    letter-spacing: -0.055em;
+    line-height: 0.98;
+    text-wrap: balance;
+  }
+}
+
+.hero-grid {
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--ink) 5%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--ink) 5%, transparent) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(to bottom, black 10%, transparent 88%);
+}
+
+.cta-grid {
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / 0.12) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.12) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: linear-gradient(90deg, transparent, black 55%, black);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
