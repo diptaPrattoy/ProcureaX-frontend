@@ -19,8 +19,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-import { Logo } from "@/components/brand/logo";
-import { SiteHeader } from "@/components/layout/site-header";
 import { Button } from "@/components/ui/button";
 
 const roleCards = [
@@ -85,8 +83,6 @@ const platformHighlights = [
 export default function Home() {
   return (
     <main className="overflow-hidden bg-background text-foreground">
-      <SiteHeader />
-
       <div className="relative isolate border-b border-ink/10 bg-cream">
         <div className="hero-grid pointer-events-none absolute inset-0 -z-20 opacity-70" />
         <div className="pointer-events-none absolute left-1/2 top-0 -z-10 h-[42rem] w-[42rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-teal/10 blur-3xl" />
@@ -348,13 +344,6 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="bg-white pb-8 pt-12">
-        <div className="mx-auto flex max-w-7xl flex-col gap-7 border-t border-ink/10 px-5 pt-8 sm:px-8 md:flex-row md:items-center md:justify-between lg:px-10">
-          <Logo />
-          <p className="text-sm text-ink/45">Purpose-built for accountable B2B procurement.</p>
-          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-ink/40">Buyer · Supplier · Admin</p>
-        </div>
-      </footer>
     </main>
   );
 }
