@@ -1,7 +1,7 @@
 "use client";
 
 import * as Dialog from "@radix-ui/react-dialog";
-import { BarChart3, Bell, ChevronRight, CreditCard, FileText, Home, LogOut, Menu, PackageCheck, ReceiptText, RotateCcw, Scale, Search, Settings, ShieldCheck, ShoppingCart, Truck, Users, X } from "lucide-react";
+import { BarChart3, Bell, ChevronRight, CreditCard, FileText, Fingerprint, Home, LogOut, Menu, PackageCheck, ReceiptText, RotateCcw, Scale, Search, Settings, ShieldCheck, ShoppingCart, Truck, Users, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
@@ -20,7 +20,7 @@ const navigation = {
     ["Overview", "/supplier", Home], ["Opportunities", "/supplier/opportunities", Search], ["Quotations", "/supplier/quotations", FileText], ["Orders", "/supplier/orders", ShoppingCart], ["Deliveries", "/supplier/deliveries", Truck], ["Invoices", "/supplier/invoices", ReceiptText], ["Disputes", "/supplier/disputes", Scale],
   ],
   ADMIN: [
-    ["Overview", "/admin", Home], ["Supplier review", "/admin/suppliers", ShieldCheck], ["Users", "/admin/users", Users], ["Analytics", "/admin/analytics", BarChart3], ["Settings", "/admin/settings", Settings],
+    ["Overview", "/admin", Home], ["Supplier review", "/admin/suppliers", ShieldCheck], ["Refund review", "/admin/refunds", RotateCcw], ["Dispute review", "/admin/disputes", Scale], ["Audit log", "/admin/audit-logs", Fingerprint], ["Users", "/admin/users", Users], ["Analytics", "/admin/analytics", BarChart3], ["Settings", "/admin/settings", Settings],
   ],
 } satisfies Record<UserRole, ReadonlyArray<readonly [string, string, typeof Home]>>;
 

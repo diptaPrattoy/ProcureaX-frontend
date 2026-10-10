@@ -11,3 +11,6 @@ async function request(path: string, init?: RequestInit) { const token = await g
 export async function listDisputes(query: URLSearchParams) { return listEnvelope.parse(await request(`disputes?${query}`)).data; }
 export async function getDispute(id: string) { return detailEnvelope.parse(await request(`disputes/${id}`)).data; }
 export async function openDispute(target: "invoices" | "purchase-orders", id: string, input: { subject: string; description: string }) { const headers = new Headers({ "Content-Type": "application/json" }); return detailEnvelope.parse(await request(`${target}/${id}/disputes`, { method: "POST", headers, body: JSON.stringify(input) })).data; }
+export async function listAdminDisputes(query: URLSearchParams) { return listEnvelope.parse(await request(`admin/disputes?${query}`)).data; }
+export async function getAdminDispute(id: string) { return detailEnvelope.parse(await request(`admin/disputes/${id}`)).data; }
+export async function reviewDispute(id: string, action: "review" | "resolve" | "reject", resolution?: string) { const headers = resolution !== undefined ? new Headers({ "Content-Type": "application/json" }) : undefined; return detailEnvelope.parse(await request(`admin/disputes/${id}/${action}`, { method: "POST", headers, body: resolution !== undefined ? JSON.stringify({ resolution }) : undefined })).data; }

@@ -14,3 +14,6 @@ export async function listRefunds(query: URLSearchParams) { return listEnvelope.
 export async function getRefund(id: string) { return detailEnvelope.parse(await request(`refunds/${id}`)).data; }
 export async function requestRefund(paymentId: string, input: { amount?: number; reason: string }) { const headers = new Headers({ "Content-Type": "application/json" }); return detailEnvelope.parse(await request(`payments/${paymentId}/refunds`, { method: "POST", headers, body: JSON.stringify(input) })).data; }
 export async function cancelRefund(id: string) { return detailEnvelope.parse(await request(`refunds/${id}/cancel`, { method: "POST" })).data; }
+export async function listAdminRefunds(query: URLSearchParams) { return listEnvelope.parse(await request(`admin/refunds?${query}`)).data; }
+export async function getAdminRefund(id: string) { return detailEnvelope.parse(await request(`admin/refunds/${id}`)).data; }
+export async function reviewRefund(id: string, action: "approve" | "reject" | "retry", note?: string) { const headers = note !== undefined ? new Headers({ "Content-Type": "application/json" }) : undefined; return detailEnvelope.parse(await request(`admin/refunds/${id}/${action}`, { method: "POST", headers, body: note !== undefined ? JSON.stringify({ note }) : undefined })).data; }
