@@ -11,3 +11,19 @@ export const auditLogSchema = z.object({ id: z.uuid(), actorId: z.uuid().nullabl
 export const auditLogListSchema = z.object({ items: z.array(auditLogSchema), pagination: paginationSchema });
 export type AdminSupplier = z.infer<typeof adminSupplierSchema>;
 export type AuditLog = z.infer<typeof auditLogSchema>;
+
+const rangeSchema = z.object({ from: z.string(), to: z.string() });
+export const adminOverviewSchema = z.object({
+  range: rangeSchema,
+  users: z.object({ total: z.number(), byRole: z.record(z.string(), z.number()), byStatus: z.record(z.string(), z.number()) }),
+  suppliers: z.object({ total: z.number(), byVerificationStatus: z.record(z.string(), z.number()) }),
+  periodActivity: z.object({ rfqsCreated: z.number(), quotationsSubmitted: z.number(), purchaseOrdersIssued: z.number(), invoicesSubmitted: z.number(), successfulPayments: z.number(), refundRequests: z.number(), disputesOpened: z.number() }),
+  backlog: z.object({ suppliersPendingVerification: z.number(), openRfqs: z.number(), invoicesAwaitingReview: z.number(), paymentsInProgress: z.number(), refundsAwaitingAction: z.number(), activeDisputes: z.number(), overdueInvoices: z.number() }),
+  recentActivity: z.array(auditLogSchema),
+});
+export const financialSummarySchema = z.object({ currency: z.string(), grossCollected: z.union([z.string(), z.number()]), successfulPaymentCount: z.number(), refunded: z.union([z.string(), z.number()]), successfulRefundCount: z.number(), netCashFlow: z.union([z.string(), z.number()]), outstandingApproved: z.union([z.string(), z.number()]), outstandingInvoiceCount: z.number() });
+export const adminFinancialsSchema = z.object({ range: rangeSchema, note: z.string(), currencies: z.array(financialSummarySchema) });
+export const adminTrendsSchema = z.object({ timezone: z.string(), days: z.number(), from: z.string(), to: z.string(), buckets: z.array(z.object({ date: z.string(), rfqs: z.number(), quotations: z.number(), purchaseOrders: z.number(), invoices: z.number(), successfulPayments: z.number(), refundRequests: z.number(), disputes: z.number() })) });
+export type AdminOverview = z.infer<typeof adminOverviewSchema>;
+export type AdminFinancials = z.infer<typeof adminFinancialsSchema>;
+export type AdminTrends = z.infer<typeof adminTrendsSchema>;
