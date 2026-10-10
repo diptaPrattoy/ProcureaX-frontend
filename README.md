@@ -28,6 +28,10 @@ STRIPE_CANCEL_URL=http://localhost:3000/payments/cancel
 
 Replace the origin with the deployed frontend URL in production.
 
+## Production deployment
+
+Set `NEXT_PUBLIC_APP_URL` to the public frontend origin, `API_BASE_URL` to the backend `/api/v1` URL, and disable `DEMO_ACCESS_ENABLED`. Configure the same frontend origin in the backend Stripe return URLs above. The app is verified with `npm run check` and `npm run build` before deployment.
+
 ## Commands
 
 ```bash

@@ -9,7 +9,7 @@ export const metadata: Metadata = { title: "Checkout cancelled" };
 
 export default function PaymentCancelPage() {
   return (
-    <main className="relative flex min-h-svh items-center justify-center overflow-hidden bg-cream p-5">
+    <main className="relative flex min-h-svh items-center justify-center overflow-hidden bg-cream p-5" id="main-content" tabIndex={-1}>
       <div className="absolute inset-0 hero-grid" />
       <section className="relative w-full max-w-lg rounded-[2rem] border border-ink/10 bg-white p-7 shadow-xl sm:p-10">
         <Logo />
