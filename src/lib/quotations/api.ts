@@ -4,12 +4,15 @@ import { z } from "zod";
 
 import { getApiBaseUrl } from "@/lib/api/config";
 import { getStoredAccessToken } from "@/lib/auth/session";
-import { buyerQuotationListSchema } from "@/lib/quotations/contracts";
+import { buyerQuotationListSchema, submitQuotationInputSchema, supplierQuotationListSchema, type SubmitQuotationInput } from "@/lib/quotations/contracts";
 
 const errorSchema = z.object({ message: z.string() });
 const quotationListEnvelope = z.object({ success: z.literal(true), data: buyerQuotationListSchema });
 const evaluationEnvelope = z.object({ success: z.literal(true), data: z.object({ id: z.uuid(), status: z.literal("EVALUATING") }).passthrough() });
 const awardEnvelope = z.object({ success: z.literal(true), data: z.object({ id: z.uuid(), poNumber: z.string(), status: z.string() }).passthrough() });
+const submittedEnvelope = z.object({ success: z.literal(true), data: z.object({ id: z.uuid(), status: z.literal("SUBMITTED") }).passthrough() });
+const supplierListEnvelope = z.object({ success: z.literal(true), data: supplierQuotationListSchema });
+const withdrawnEnvelope = z.object({ success: z.literal(true), data: z.object({ id: z.uuid(), status: z.literal("WITHDRAWN") }).passthrough() });
 
 export class QuotationApiError extends Error {
   constructor(message: string, public readonly status: number) { super(message); this.name = "QuotationApiError"; }
@@ -34,4 +37,15 @@ export async function startRfqEvaluation(rfqId: string) {
 }
 export async function awardQuotation(rfqId: string, quotationId: string) {
   return awardEnvelope.parse(await authorizedRequest(`rfqs/${rfqId}/quotations/${quotationId}/award`, { method: "POST" })).data;
+}
+
+export async function submitQuotation(rfqId: string, input: SubmitQuotationInput) {
+  const headers = new Headers({ "Content-Type": "application/json" });
+  return submittedEnvelope.parse(await authorizedRequest(`rfqs/${rfqId}/quotations`, { method: "POST", headers, body: JSON.stringify(submitQuotationInputSchema.parse(input)) })).data;
+}
+export async function listSupplierQuotations(query = new URLSearchParams({ limit: "50" })) {
+  return supplierListEnvelope.parse(await authorizedRequest(`quotations/mine?${query}`)).data;
+}
+export async function withdrawQuotation(quotationId: string) {
+  return withdrawnEnvelope.parse(await authorizedRequest(`quotations/${quotationId}/withdraw`, { method: "POST" })).data;
 }

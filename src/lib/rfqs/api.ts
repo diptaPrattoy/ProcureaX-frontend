@@ -52,3 +52,13 @@ export async function getBuyerRfq(rfqId: string) {
   const headers = await authorizationHeaders();
   return rfqDetailEnvelope.parse(await request(`rfqs/mine/${rfqId}`, { headers })).data;
 }
+
+export async function listOpenRfqs(query: URLSearchParams) {
+  const headers = await authorizationHeaders();
+  return rfqListEnvelope.parse(await request(`rfqs/open?${query}`, { headers })).data;
+}
+
+export async function getOpenRfq(rfqId: string) {
+  const headers = await authorizationHeaders();
+  return rfqDetailEnvelope.parse(await request(`rfqs/open/${rfqId}`, { headers })).data;
+}
