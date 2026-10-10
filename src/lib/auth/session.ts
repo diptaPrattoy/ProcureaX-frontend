@@ -1,7 +1,6 @@
 import "server-only";
 
 import { cookies } from "next/headers";
-import { cache } from "react";
 import { z } from "zod";
 
 import {
@@ -95,7 +94,7 @@ async function readStoredTokens() {
   };
 }
 
-async function readCurrentUser(): Promise<PublicUser | null> {
+export async function getCurrentUser(): Promise<PublicUser | null> {
   const { accessToken } = await readStoredTokens();
   if (!accessToken) return null;
 
@@ -106,8 +105,6 @@ async function readCurrentUser(): Promise<PublicUser | null> {
     throw error;
   }
 }
-
-export const getCurrentUser = cache(readCurrentUser);
 
 export async function startPasswordSession(input: LoginInput) {
   const session = await loginWithPassword(input);
