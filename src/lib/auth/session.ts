@@ -94,6 +94,11 @@ async function readStoredTokens() {
   };
 }
 
+export async function getStoredAccessToken() {
+  const { accessToken } = await readStoredTokens();
+  return accessToken;
+}
+
 export async function getCurrentUser(): Promise<PublicUser | null> {
   const { accessToken } = await readStoredTokens();
   if (!accessToken) return null;
