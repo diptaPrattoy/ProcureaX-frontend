@@ -1,7 +1,7 @@
 "use client";
 
 import * as Dialog from "@radix-ui/react-dialog";
-import { BarChart3, Bell, ChevronRight, FileText, Home, LogOut, Menu, PackageCheck, ReceiptText, Search, Settings, ShieldCheck, ShoppingCart, Truck, Users, X } from "lucide-react";
+import { BarChart3, Bell, ChevronRight, CreditCard, FileText, Home, LogOut, Menu, PackageCheck, ReceiptText, Search, Settings, ShieldCheck, ShoppingCart, Truck, Users, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 
 const navigation = {
   BUYER: [
-    ["Overview", "/buyer", Home], ["RFQs", "/buyer/rfqs", FileText], ["Quotations", "/buyer/quotations", BarChart3], ["Purchase orders", "/buyer/orders", ShoppingCart], ["Receiving", "/buyer/receiving", PackageCheck], ["Invoices", "/buyer/invoices", ReceiptText],
+    ["Overview", "/buyer", Home], ["RFQs", "/buyer/rfqs", FileText], ["Quotations", "/buyer/quotations", BarChart3], ["Purchase orders", "/buyer/orders", ShoppingCart], ["Receiving", "/buyer/receiving", PackageCheck], ["Invoices", "/buyer/invoices", ReceiptText], ["Payments", "/buyer/payments", CreditCard],
   ],
   SUPPLIER: [
     ["Overview", "/supplier", Home], ["Opportunities", "/supplier/opportunities", Search], ["Quotations", "/supplier/quotations", FileText], ["Orders", "/supplier/orders", ShoppingCart], ["Deliveries", "/supplier/deliveries", Truck], ["Invoices", "/supplier/invoices", ReceiptText],

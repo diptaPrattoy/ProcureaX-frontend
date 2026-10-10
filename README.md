@@ -19,6 +19,15 @@ ProcuraX is the frontend for a B2B procurement platform covering supplier onboar
 
 The frontend runs at [http://localhost:3000](http://localhost:3000) by default.
 
+For Stripe checkout, configure the backend return URLs to point at this frontend:
+
+```env
+STRIPE_SUCCESS_URL=http://localhost:3000/payments/success?session_id={CHECKOUT_SESSION_ID}
+STRIPE_CANCEL_URL=http://localhost:3000/payments/cancel
+```
+
+Replace the origin with the deployed frontend URL in production.
+
 ## Commands
 
 ```bash
