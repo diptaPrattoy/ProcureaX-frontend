@@ -1,0 +1,21 @@
+"use client";
+
+import { ClipboardCheck, LoaderCircle } from "lucide-react";
+import { useActionState, useMemo, useState } from "react";
+
+import { recordReceiptAction, type ReceiptActionState } from "@/app/(workspace)/goods-receipt-actions";
+import { Button } from "@/components/ui/button";
+import type { ReceiptDetail } from "@/lib/goods-receipts/contracts";
+import type { PurchaseOrderDetail } from "@/lib/purchase-orders/contracts";
+
+const initial: ReceiptActionState = { status: "idle" };
+type Entry = { purchaseOrderItemId: string; quantityReceived: string; quantityAccepted: string; quantityRejected: string; notes: string };
+export function ReceiptForm({ order, receipts }: { order: PurchaseOrderDetail; receipts: ReceiptDetail[] }) {
+  const accepted = useMemo(() => { const totals = new Map<string, number>(); receipts.flatMap((receipt) => receipt.items).forEach((item) => totals.set(item.purchaseOrderItemId, (totals.get(item.purchaseOrderItemId) ?? 0) + Number(item.quantityAccepted))); return totals; }, [receipts]);
+  const available = order.items.filter((item) => Number(item.quantity) - (accepted.get(item.id) ?? 0) > 0);
+  const [entries, setEntries] = useState<Entry[]>(() => available.map((item) => ({ purchaseOrderItemId: item.id, quantityReceived: "", quantityAccepted: "", quantityRejected: "0", notes: "" })));
+  const [state, action, pending] = useActionState(recordReceiptAction, initial);
+  const update = (index: number, key: keyof Entry, value: string) => setEntries((current) => current.map((entry, currentIndex) => currentIndex === index ? { ...entry, [key]: value } : entry));
+  return <form action={action} className="mt-6 rounded-2xl border border-teal/15 bg-mint/15 p-5" noValidate><input name="purchaseOrderId" type="hidden" value={order.id} /><input name="items" type="hidden" value={JSON.stringify(entries.filter((entry) => Number(entry.quantityReceived) > 0))} /><div className="flex items-start gap-3"><span className="grid size-10 shrink-0 place-items-center rounded-xl bg-teal text-white"><ClipboardCheck className="size-5" /></span><div><h3 className="font-bold text-ink">Record a delivery</h3><p className="mt-1 text-sm text-ink/50">Enter only items included in this shipment. Accepted quantities drive order progress.</p></div></div>{state.message ? <p className={`mt-4 rounded-xl p-3 text-sm ${state.status === "error" ? "bg-red-50 text-red-800" : "bg-white text-teal"}`} role="status">{state.message}</p> : null}<div className="mt-5 space-y-3">{available.map((item, index) => { const remaining = Number(item.quantity) - (accepted.get(item.id) ?? 0); return <div className="grid gap-3 rounded-xl bg-white p-4 lg:grid-cols-[1fr_repeat(3,7rem)] lg:items-end" key={item.id}><div><p className="text-sm font-bold text-ink">{item.itemName}</p><p className="mt-1 text-xs text-ink/40">Remaining: {remaining} {item.unit}</p></div><Quantity label="Received" max={remaining} onChange={(value) => { update(index, "quantityReceived", value); update(index, "quantityAccepted", value); }} value={entries[index]?.quantityReceived ?? ""} /><Quantity label="Accepted" max={remaining} onChange={(value) => update(index, "quantityAccepted", value)} value={entries[index]?.quantityAccepted ?? ""} /><Quantity label="Rejected" max={remaining} onChange={(value) => update(index, "quantityRejected", value)} value={entries[index]?.quantityRejected ?? "0"} /></div>; })}</div><label className="mt-4 block text-sm font-bold text-ink">Receipt notes (optional)<textarea className="mt-2 min-h-20 w-full rounded-xl border border-ink/15 bg-white p-3 text-sm outline-none focus:border-teal" name="notes" placeholder="Condition, packaging, inspection notes..." /></label><Button className="mt-4" disabled={pending || !available.length} type="submit">{pending ? <LoaderCircle className="animate-spin" /> : <ClipboardCheck />}{pending ? "Recording..." : "Record goods receipt"}</Button></form>;
+}
+function Quantity({ label, max, onChange, value }: { label: string; max: number; onChange: (value: string) => void; value: string }) { return <label className="text-xs font-bold text-ink/55">{label}<input className="mt-1.5 h-10 w-full rounded-lg border border-ink/15 px-3 text-sm outline-none focus:border-teal" max={max} min="0" onChange={(event) => onChange(event.target.value)} step="0.001" type="number" value={value} /></label>; }
