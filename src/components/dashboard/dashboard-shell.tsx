@@ -41,7 +41,7 @@ export function DashboardShell({ children, user }: { children: ReactNode; user: 
             <span className="hidden size-10 items-center justify-center rounded-xl bg-amber text-sm font-black text-ink sm:flex">{user.firstName[0]}{user.lastName[0]}</span>
           </div>
         </header>
-        <main className="mx-auto w-full max-w-[92rem] p-5 sm:p-8 lg:p-10">{children}</main>
+        <main className="mx-auto w-full max-w-[92rem] p-5 sm:p-8 lg:p-10" id="main-content" tabIndex={-1}>{children}</main>
       </div>
     </div>
   );

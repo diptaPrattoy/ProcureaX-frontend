@@ -9,7 +9,7 @@ export const metadata: Metadata = { title: "Payment submitted" };
 
 export default function PaymentSuccessPage() {
   return (
-    <main className="relative flex min-h-svh items-center justify-center overflow-hidden bg-ink p-5">
+    <main className="relative flex min-h-svh items-center justify-center overflow-hidden bg-ink p-5" id="main-content" tabIndex={-1}>
       <div className="absolute inset-0 hero-grid opacity-20" />
       <div className="absolute -right-24 -top-24 size-80 rounded-full bg-mint/15 blur-3xl" />
       <section className="relative w-full max-w-lg rounded-[2rem] bg-white p-7 shadow-2xl sm:p-10">

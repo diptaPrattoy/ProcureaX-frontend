@@ -5,7 +5,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
   return (
     <>
       <SiteHeader />
-      {children}
+      <div id="main-content" tabIndex={-1}>{children}</div>
       <SiteFooter />
     </>
   );
