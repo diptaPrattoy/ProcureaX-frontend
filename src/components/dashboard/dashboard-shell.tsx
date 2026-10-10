@@ -1,7 +1,7 @@
 "use client";
 
 import * as Dialog from "@radix-ui/react-dialog";
-import { BarChart3, Bell, ChevronRight, CreditCard, FileText, Home, LogOut, Menu, PackageCheck, ReceiptText, Search, Settings, ShieldCheck, ShoppingCart, Truck, Users, X } from "lucide-react";
+import { BarChart3, Bell, ChevronRight, CreditCard, FileText, Home, LogOut, Menu, PackageCheck, ReceiptText, RotateCcw, Scale, Search, Settings, ShieldCheck, ShoppingCart, Truck, Users, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
@@ -14,10 +14,10 @@ import { cn } from "@/lib/utils";
 
 const navigation = {
   BUYER: [
-    ["Overview", "/buyer", Home], ["RFQs", "/buyer/rfqs", FileText], ["Quotations", "/buyer/quotations", BarChart3], ["Purchase orders", "/buyer/orders", ShoppingCart], ["Receiving", "/buyer/receiving", PackageCheck], ["Invoices", "/buyer/invoices", ReceiptText], ["Payments", "/buyer/payments", CreditCard],
+    ["Overview", "/buyer", Home], ["RFQs", "/buyer/rfqs", FileText], ["Quotations", "/buyer/quotations", BarChart3], ["Purchase orders", "/buyer/orders", ShoppingCart], ["Receiving", "/buyer/receiving", PackageCheck], ["Invoices", "/buyer/invoices", ReceiptText], ["Payments", "/buyer/payments", CreditCard], ["Refunds", "/buyer/refunds", RotateCcw], ["Disputes", "/buyer/disputes", Scale],
   ],
   SUPPLIER: [
-    ["Overview", "/supplier", Home], ["Opportunities", "/supplier/opportunities", Search], ["Quotations", "/supplier/quotations", FileText], ["Orders", "/supplier/orders", ShoppingCart], ["Deliveries", "/supplier/deliveries", Truck], ["Invoices", "/supplier/invoices", ReceiptText],
+    ["Overview", "/supplier", Home], ["Opportunities", "/supplier/opportunities", Search], ["Quotations", "/supplier/quotations", FileText], ["Orders", "/supplier/orders", ShoppingCart], ["Deliveries", "/supplier/deliveries", Truck], ["Invoices", "/supplier/invoices", ReceiptText], ["Disputes", "/supplier/disputes", Scale],
   ],
   ADMIN: [
     ["Overview", "/admin", Home], ["Supplier review", "/admin/suppliers", ShieldCheck], ["Users", "/admin/users", Users], ["Analytics", "/admin/analytics", BarChart3], ["Settings", "/admin/settings", Settings],
@@ -37,7 +37,7 @@ export function DashboardShell({ children, user }: { children: ReactNode; user: 
           <div className="flex items-center gap-3 lg:hidden"><MobileSidebar links={links} user={user} /><Logo /></div>
           <div className="hidden lg:block"><p className="text-xs font-bold uppercase tracking-[0.14em] text-teal">{roleLabel[user.role]} workspace</p><p className="mt-1 text-sm text-ink/45">Procurement command center</p></div>
           <div className="flex items-center gap-2">
-            <Button aria-label="Notifications" size="icon" variant="ghost"><Bell /></Button>
+            <Button aria-label="Notifications" asChild size="icon" variant="ghost"><Link href="/notifications"><Bell /></Link></Button>
             <span className="hidden size-10 items-center justify-center rounded-xl bg-amber text-sm font-black text-ink sm:flex">{user.firstName[0]}{user.lastName[0]}</span>
           </div>
         </header>

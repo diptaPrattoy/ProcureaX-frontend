@@ -2,6 +2,7 @@ import { ArrowLeft, CalendarClock, CircleCheckBig, CreditCard, ExternalLink, Rec
 import Link from "next/link";
 
 import { Status } from "@/components/payments/payment-list";
+import { RefundRequestForm } from "@/components/refunds/refund-request-form";
 import { Button } from "@/components/ui/button";
 import { FeedbackState } from "@/components/ui/feedback-state";
 import { requireRole } from "@/lib/auth/access";
@@ -34,6 +35,7 @@ export async function PaymentDetail({ id }: { id: string }) {
         </section>
         <section className="rounded-[1.5rem] border border-ink/10 bg-white p-6 sm:p-8"><h2 className="text-xl font-semibold">Related record</h2><p className="mt-4 text-xs font-bold uppercase tracking-[0.12em] text-ink/35">Invoice</p><p className="mt-2 font-mono text-sm">{payment.invoice.invoiceNumber}</p><p className="mt-1 text-sm text-ink/45">Due {new Intl.DateTimeFormat("en", { dateStyle: "medium" }).format(new Date(payment.invoice.dueDate))}</p><Button asChild className="mt-6 w-full" variant="outline"><Link href={`/buyer/invoices/${payment.invoiceId}`}>Open invoice <ArrowLeft className="rotate-180" /></Link></Button>{payment.receiptUrl ? <Button asChild className="mt-3 w-full"><a href={payment.receiptUrl} rel="noreferrer" target="_blank">Stripe receipt <ExternalLink /></a></Button> : null}</section>
       </div>
+      {payment.status === "SUCCEEDED" ? <RefundRequestForm amount={payment.amount} currency={payment.currency} paymentId={payment.id} /> : null}
     </div>
   );
 }
