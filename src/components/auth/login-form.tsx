@@ -13,7 +13,7 @@ const initialState: LoginActionState = { status: "idle" };
 const inputClassName =
   "h-13 w-full rounded-xl border border-ink/15 bg-white pl-12 pr-4 text-[0.95rem] font-medium text-ink outline-none transition placeholder:text-ink/30 focus:border-teal focus:ring-4 focus:ring-teal/10 aria-[invalid=true]:border-red-500 aria-[invalid=true]:ring-4 aria-[invalid=true]:ring-red-500/10";
 
-export function LoginForm() {
+export function LoginForm({ nextPath }: { nextPath?: string }) {
   const [state, formAction, pending] = useActionState(loginAction, initialState);
   const [showPassword, setShowPassword] = useState(false);
   const emailError = state.fieldErrors?.email?.[0];
@@ -21,6 +21,7 @@ export function LoginForm() {
 
   return (
     <form action={formAction} className="mt-8 space-y-5" noValidate>
+      {nextPath ? <input name="next" type="hidden" value={nextPath} /> : null}
       {state.message ? (
         <div className="rounded-xl border border-red-600/15 bg-red-50 px-4 py-3 text-sm leading-6 text-red-800" role="alert">
           {state.message}

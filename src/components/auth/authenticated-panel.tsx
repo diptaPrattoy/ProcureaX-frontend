@@ -40,8 +40,8 @@ export function AuthenticatedPanel({ user }: { user: PublicUser }) {
 
       <div className="mt-8 grid gap-3 sm:grid-cols-2">
         <Button asChild size="lg">
-          <Link href="/platform">
-            Explore platform
+          <Link href="/workspace">
+            Open workspace
             <ArrowRight aria-hidden="true" />
           </Link>
         </Button>
@@ -52,9 +52,6 @@ export function AuthenticatedPanel({ user }: { user: PublicUser }) {
           </Button>
         </form>
       </div>
-      <p className="mt-5 text-xs leading-5 text-ink/40">
-        Your role-specific workspace will connect here in the upcoming dashboard commits.
-      </p>
     </div>
   );
 }

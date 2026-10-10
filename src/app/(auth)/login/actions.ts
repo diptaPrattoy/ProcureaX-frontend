@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { AuthApiError } from "@/lib/auth/api";
+import { safeReturnPath } from "@/lib/auth/access";
 import { loginInputSchema, userRoleSchema } from "@/lib/auth/contracts";
 import { getDemoCredentials } from "@/lib/auth/demo-access";
 import type { DemoLoginActionState, LoginActionState } from "@/lib/auth/form-state";
@@ -51,7 +52,7 @@ export async function loginAction(
   }
 
   revalidatePath("/", "layout");
-  redirect("/login?authenticated=true");
+  redirect(safeReturnPath(formData.get("next")));
 }
 
 export async function demoLoginAction(
@@ -75,7 +76,7 @@ export async function demoLoginAction(
   }
 
   revalidatePath("/", "layout");
-  redirect("/login?authenticated=true");
+  redirect("/workspace");
 }
 
 export async function logoutAction() {

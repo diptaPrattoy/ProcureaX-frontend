@@ -1,15 +1,19 @@
 "use client";
 
 import * as Dialog from "@radix-ui/react-dialog";
-import { ArrowRight, Menu, X } from "lucide-react";
+import { ArrowRight, LogOut, Menu, X } from "lucide-react";
 import Link from "next/link";
 
+import { logoutAction } from "@/app/(auth)/login/actions";
 import { Logo } from "@/components/brand/logo";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { publicNavigation } from "@/config/navigation";
+import type { PublicUser } from "@/lib/auth/contracts";
 import { cn } from "@/lib/utils";
 
-export function MobileNavigation() {
+type NavigationUser = Pick<PublicUser, "email" | "firstName" | "role">;
+
+export function MobileNavigation({ user }: { user?: NavigationUser }) {
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
@@ -55,17 +59,22 @@ export function MobileNavigation() {
           </nav>
 
           <div className="mt-auto space-y-3 border-t border-ink/10 pt-6">
-            <Dialog.Close asChild>
-              <Link className={cn(buttonVariants({ size: "lg" }), "w-full")} href="/register">
-                Create your workspace
-                <ArrowRight aria-hidden="true" />
-              </Link>
-            </Dialog.Close>
-            <Dialog.Close asChild>
-              <Link className={cn(buttonVariants({ size: "lg", variant: "outline" }), "w-full")} href="/login">
-                Sign in
-              </Link>
-            </Dialog.Close>
+            {user ? (
+              <>
+                <div className="rounded-2xl bg-white p-4">
+                  <p className="text-sm font-bold text-ink">{user.firstName}</p>
+                  <p className="mt-1 truncate text-xs text-ink/45">{user.email}</p>
+                  <p className="mt-2 text-[0.65rem] font-bold uppercase tracking-[0.14em] text-teal">{user.role.toLowerCase()} account</p>
+                </div>
+                <Dialog.Close asChild><Link className={cn(buttonVariants({ size: "lg" }), "w-full")} href="/workspace">Open workspace <ArrowRight aria-hidden="true" /></Link></Dialog.Close>
+                <form action={logoutAction}><Button className="w-full" size="lg" type="submit" variant="outline"><LogOut aria-hidden="true" /> Sign out</Button></form>
+              </>
+            ) : (
+              <>
+                <Dialog.Close asChild><Link className={cn(buttonVariants({ size: "lg" }), "w-full")} href="/register">Create your workspace <ArrowRight aria-hidden="true" /></Link></Dialog.Close>
+                <Dialog.Close asChild><Link className={cn(buttonVariants({ size: "lg", variant: "outline" }), "w-full")} href="/login">Sign in</Link></Dialog.Close>
+              </>
+            )}
             <p className="pt-2 text-center text-xs leading-5 text-ink/45">
               Purpose-built for buyers, suppliers, and administrators.
             </p>

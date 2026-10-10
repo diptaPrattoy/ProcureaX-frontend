@@ -20,7 +20,9 @@ const trustPoints = [
   { icon: ShieldCheck, label: "Role checks at every boundary" },
 ] as const;
 
-export default function LoginPage() {
+type LoginPageProps = { searchParams: Promise<Record<string, string | string[] | undefined>> };
+
+export default function LoginPage({ searchParams }: LoginPageProps) {
   return (
     <main className="grid min-h-svh bg-cream lg:grid-cols-[0.82fr_1.18fr]">
       <section className="relative hidden overflow-hidden bg-ink px-10 py-12 text-white lg:flex lg:flex-col xl:px-16 xl:py-14">
@@ -68,7 +70,7 @@ export default function LoginPage() {
 
         <div className="mx-auto w-full max-w-[36rem]">
           <Suspense fallback={<LoginPanelSkeleton />}>
-            <LoginExperience />
+            <LoginExperience searchParams={searchParams} />
           </Suspense>
         </div>
       </section>
@@ -76,9 +78,13 @@ export default function LoginPage() {
   );
 }
 
-async function LoginExperience() {
-  const user = await getCurrentUser();
+async function LoginExperience({ searchParams }: LoginPageProps) {
+  const [user, params] = await Promise.all([getCurrentUser(), searchParams]);
   if (user) return <AuthenticatedPanel user={user} />;
+
+  const nextPath = typeof params.next === "string" && params.next.startsWith("/") && !params.next.startsWith("//")
+    ? params.next
+    : undefined;
 
   return (
     <div>
@@ -87,7 +93,7 @@ async function LoginExperience() {
       <p className="mt-4 max-w-lg text-base leading-7 text-ink/55">
         Use your account details, or open a role workspace instantly for evaluation.
       </p>
-      <LoginForm />
+      <LoginForm nextPath={nextPath} />
       <DemoAccess />
       <p className="mt-7 text-center text-sm text-ink/50">
         New to ProcuraX?{" "}

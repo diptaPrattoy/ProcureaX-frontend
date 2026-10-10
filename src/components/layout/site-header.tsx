@@ -1,9 +1,8 @@
-import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { Suspense } from "react";
 
 import { Logo } from "@/components/brand/logo";
-import { MobileNavigation } from "@/components/layout/mobile-navigation";
-import { Button } from "@/components/ui/button";
+import { HeaderSessionActions, HeaderSessionFallback } from "@/components/layout/header-session-actions";
 import { publicNavigation } from "@/config/navigation";
 
 export function SiteHeader() {
@@ -20,19 +19,7 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-2 lg:flex">
-          <Button asChild variant="ghost" size="sm">
-            <Link href="/login">Sign in</Link>
-          </Button>
-          <Button asChild size="sm">
-            <Link href="/register">
-              Get started
-              <ArrowRight aria-hidden="true" />
-            </Link>
-          </Button>
-        </div>
-
-        <MobileNavigation />
+        <Suspense fallback={<HeaderSessionFallback />}><HeaderSessionActions /></Suspense>
       </div>
     </header>
   );
