@@ -1,0 +1,22 @@
+import { ArrowRight, CalendarDays, Search, ShoppingCart } from "lucide-react";
+import Link from "next/link";
+
+import { Button } from "@/components/ui/button";
+import { FeedbackState } from "@/components/ui/feedback-state";
+import { requireRole } from "@/lib/auth/access";
+import type { UserRole } from "@/lib/auth/contracts";
+import { listPurchaseOrders, PurchaseOrderApiError } from "@/lib/purchase-orders/api";
+import type { PurchaseOrderListItem } from "@/lib/purchase-orders/contracts";
+
+type Props = { role: Extract<UserRole, "BUYER" | "SUPPLIER">; searchParams: Promise<Record<string, string | string[] | undefined>> };
+const statuses = ["ISSUED", "ACCEPTED", "REJECTED", "IN_PROGRESS", "PARTIALLY_DELIVERED", "DELIVERED", "COMPLETED", "CANCELLED"];
+
+export async function PurchaseOrderList({ role, searchParams }: Props) {
+  const base = role === "BUYER" ? "/buyer/orders" : "/supplier/orders"; await requireRole([role], base); const params = await searchParams; const query = new URLSearchParams({ limit: "50" });
+  if (typeof params.search === "string" && params.search.trim()) query.set("search", params.search.trim().slice(0, 120)); if (typeof params.status === "string" && statuses.includes(params.status)) query.set("status", params.status);
+  let data; try { data = await listPurchaseOrders(query); } catch (error) { return <FeedbackState description={error instanceof PurchaseOrderApiError ? error.message : "Orders could not be loaded."} title="Unable to load orders" tone="danger" />; }
+  return <div><p className="eyebrow">Order management</p><h1 className="mt-3 text-4xl font-semibold tracking-[-0.05em] text-ink sm:text-5xl">Purchase orders.</h1><p className="mt-3 text-ink/50">{role === "BUYER" ? "Track awarded sourcing decisions through fulfillment." : "Review buyer commitments and move accepted orders into fulfillment."}</p><form className="mt-7 flex flex-col gap-3 rounded-2xl border border-ink/10 bg-white p-3 sm:flex-row"><div className="relative flex-1"><Search className="absolute left-4 top-1/2 size-4 -translate-y-1/2 text-ink/30" /><input className="h-11 w-full rounded-xl bg-cream pl-11 pr-4 text-sm outline-none" defaultValue={typeof params.search === "string" ? params.search : ""} name="search" placeholder="Search PO number, RFQ, or company" /></div><select className="h-11 rounded-xl bg-cream px-4 text-sm font-semibold" defaultValue={typeof params.status === "string" ? params.status : ""} name="status"><option value="">All statuses</option>{statuses.map((status) => <option key={status}>{status}</option>)}</select><Button type="submit" variant="outline">Filter</Button></form><div className="mt-6">{data.items.length ? <div className="grid gap-4">{data.items.map((order) => <OrderCard base={base} key={order.id} order={order} role={role} />)}</div> : <FeedbackState icon={ShoppingCart} compact description="Orders appear here automatically when a buyer awards a quotation." title="No purchase orders found" />}</div>{data.pagination.total ? <p className="mt-5 text-sm text-ink/40">{data.pagination.total} total orders</p> : null}</div>;
+}
+
+function OrderCard({ base, order, role }: { base: string; order: PurchaseOrderListItem; role: "BUYER" | "SUPPLIER" }) { const company = role === "BUYER" ? order.supplier.supplierProfile?.companyName : order.buyer.buyerProfile?.companyName; return <article className="grid gap-5 rounded-[1.5rem] border border-ink/10 bg-white p-6 lg:grid-cols-[1fr_auto] lg:items-center"><div><div className="flex flex-wrap items-center gap-2"><span className="rounded-full bg-mint/30 px-2.5 py-1 text-xs font-bold text-teal">{order.status.replaceAll("_", " ")}</span><span className="font-mono text-xs text-ink/35">{order.poNumber}</span></div><h2 className="mt-3 text-xl font-semibold text-ink">{order.rfq.title}</h2><p className="mt-1 text-sm text-ink/45">{company ?? (role === "BUYER" ? "Supplier" : "Buyer")}</p><div className="mt-4 flex flex-wrap gap-4 text-xs font-semibold text-ink/45"><span>{formatMoney(order.totalAmount, order.currency)}</span><span>{order._count.items} items</span><span className="inline-flex items-center gap-1.5"><CalendarDays className="size-3.5" /> Issued {new Intl.DateTimeFormat("en", { dateStyle: "medium" }).format(new Date(order.issuedAt))}</span></div></div><Button asChild variant="outline"><Link href={`${base}/${order.id}`}>View order <ArrowRight /></Link></Button></article>; }
+function formatMoney(value: string | number, currency: string) { return new Intl.NumberFormat("en", { style: "currency", currency }).format(Number(value)); }
